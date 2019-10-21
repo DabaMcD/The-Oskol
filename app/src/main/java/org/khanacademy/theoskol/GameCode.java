@@ -20,8 +20,8 @@ class GameCode {
     private static int tav = BOTTOM; // Text Align Vertical
 
     // Drawing vars
-    private final static float width = 400; // Original Canvas Width
-    private final static float height = 400; // Original Canvas Height
+    private final static float width = 600; // Original Canvas Width
+    private final static float height = 600; // Original Canvas Height
     private static Paint pf = new Paint(Paint.ANTI_ALIAS_FLAG); // Paint fill
     private static Paint ps = new Paint(Paint.ANTI_ALIAS_FLAG); // Paint stroke
     private static Paint pm = new Paint(Paint.ANTI_ALIAS_FLAG); // Paint miscellaneous
@@ -42,9 +42,10 @@ class GameCode {
         ps.setStyle(Paint.Style.STROKE);
         pm.setStyle(Paint.Style.FILL);
         pm.setColor(Color.BLACK);
+        pjsInit();
     }
     static void draw(Canvas c) {
-        frameCount ++;
+        frameCount += 2;
         canvas = c;
 
         if (Screen.width > Screen.height) {
@@ -68,14 +69,14 @@ class GameCode {
     private static void background(int r, int g, int b) {
         pm.set(pf);
         pf.setColor(Color.rgb(r, g, b));
-        canvas.drawRect(0f, 0f, 400f, 400f, pf);
+        canvas.drawRect(0f, 0f, width, height, pf);
         pf.set(pm);
         pm.setColor(Color.BLACK);
     }
     private static void background(int shade) {
         pm.set(pf);
         pm.setColor(Color.rgb(shade, shade, shade));
-        canvas.drawRect(0f, 0f, 400f, 400f, pf);
+        canvas.drawRect(0f, 0f, width, height, pf);
         pf.set(pm);
     }
     private static void noFill() {
@@ -916,6 +917,9 @@ class GameCode {
         arm(370, 260, 95, (float) (25 + sin(frameCount * 4 + 180) * 3), (float) (-30 + sin(frameCount * 4 + 180) * 3), (float) (-20 + sin(frameCount * 4 + 180) * 3), false);
         arm(360, 230, 100, (float) (5 + sin(frameCount * 4 + 270) * 3), (float) (-30 + sin(frameCount * 4 + 270) * 3), (float) (-20 + sin(frameCount * 4 + 270) * 3), false);
         popMatrix();
+    }
+    private static void pjsInit() {
+        pf.setTextSize(40f);
     }
     private static void pjsCode() {
         background(0, 0, 0);

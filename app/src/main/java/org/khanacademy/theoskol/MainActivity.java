@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
                                 gameView.draw();
                             }
                         });
-                        Thread.sleep(Math.abs(previousMillis - System.currentTimeMillis() + 50 / 3));
+                        Thread.sleep(Math.abs(previousMillis - System.currentTimeMillis() + 100/3));
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
