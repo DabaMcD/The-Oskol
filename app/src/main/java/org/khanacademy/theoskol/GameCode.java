@@ -323,7 +323,6 @@ class GameCode {
         arc(30, 8, 3, 3, 20, 230);
         popMatrix();
     }
-
     private static void spike(float x, float y, float w, float h, float r) {
         pushMatrix();
         translate(x, y);
@@ -336,7 +335,6 @@ class GameCode {
         triangle(-20, 0, -5, -5, 0, -100);
         popMatrix();
     }
-
     private static void toe(float x, float y, float w, float h, float r) {
         pushMatrix();
         translate(x, y);
@@ -351,7 +349,6 @@ class GameCode {
         endShape();
         popMatrix();
     }
-
     private static void head(float x, float y, float w, float h, float r) {
         pushMatrix();
         translate(x, y);
@@ -539,7 +536,6 @@ class GameCode {
         popMatrix();
         popMatrix();
     }
-
     private static void neck(float x, float y, float w, float h, float r) {
         pushMatrix();
         translate(x, y);
@@ -577,7 +573,6 @@ class GameCode {
         sheet(30, -50, 70, 100, 28, false);
         popMatrix();
     }
-
     private static void body(float x, float y, float w, float h, float r) {
         pushMatrix();
         translate(x, y);
@@ -661,7 +656,6 @@ class GameCode {
         sheet(90, 20, 80, 80, 100, false);
         popMatrix();
     }
-
     private static void arm(float x, float y, float size, float shoulder, float elbow, float hand, boolean flip) {
         pushMatrix();
         translate(x, y);
@@ -771,7 +765,7 @@ class GameCode {
         bezierVertex(50, 10, 60, 25, 70, 30);
         vertex(0, 25);
         endShape();
-        for (private static void i = 4; i >= 0; i--) {
+        for (int i = 4; i >= 0; i--) {
             fill(130 - i * 15, 70 - i * 15, 50 - i * 8);
             ellipse(20 - i * 5, 13, 15, 26);
         }
@@ -785,8 +779,7 @@ class GameCode {
         bezier(0, 10, 30, 10, 40, 30, 60, 30);
         popMatrix();
     }
-
-    private static void leg = function(x, y, size, hip, knee, foot, flip) {
+    private static void leg(float x, float y, float size, float hip, float knee, float foot, boolean flip) {
         pushMatrix();
         translate(x, y);
         rotate(hip);
@@ -872,7 +865,63 @@ class GameCode {
         spike(0, 0, 30, 20, 160);
         popMatrix();
     }
-    private static void pjsCode() {
+    private static void oskol(float x, float y, float size) {
+        pushMatrix();
+        translate(x - 355, y - 330);
+        scale(size / 100, size / 100);
+        arm(310, 260, 95, (float) (-45 + sin(frameCount * 4) * 3), (float) (-30 + sin(frameCount * 4) * 3), (float) (-20 + sin(frameCount * 4) * 3), true);
+        arm(320, 230, 100, (float) (-5 + sin(frameCount * 4 + 90) * 3), (float) (-30 + sin(frameCount * 4 + 90) * 3), (float) (-20 + sin(frameCount * 4 + 90) * 3), true);
 
+        leg(375, 370, 150, (float) (-80 + sin(frameCount * 8) * 2), (float) (-10 + sin(frameCount * 8 + 15) * 2), -60, true);
+        leg(320, 370, 155, (float) (70 - sin(frameCount * 8) * 2), (float) (-70 + sin(frameCount * 8 + 15) * 2), 10, false);
+
+        fill(0, 0, 0, 160);
+        noStroke();
+        rect(0, 0, width, height);
+        noStroke();
+        fill(240, 230, 190);
+        ellipse(345, 380, 60, 60);
+        fill(0, 0, 50, 50);
+        ellipse(345, 375, 50, 50);
+        spike(345, 400, 20, 20, 175);
+        spike(340, 390, 50, 30, 200);
+        spike(320, 380, 40, 40, 260);
+        spike(330, 388, 45, 55, 225);
+        spike(335, 370, 50, 40, 210);
+
+        sheetPlus = 0;
+        body((float) (300 - sin(frameCount * 8) * 2), 255, (float) (100 + sin(frameCount * 8) * 2), (float) (100 + sin(frameCount * 4) * 3), 0);
+        noStroke();
+        fill(240, 230, 190, 55);
+        ellipse(345, 380, 65, 25);
+        ellipse(345, 370, 50, 15);
+
+        leg(360, 375, 160, (float) (-50 + sin(frameCount * 8) * 2), (float) (20 + sin(frameCount * 8 + 15) * 2), -70, true);
+        spike(345, 385, 30, 35, 150);
+        spike(315, 370, 20, 30, 275);
+
+        fill(0, 0, 0, 20);
+        noStroke();
+        rect(0, 0, width, height);
+
+        sheetPlus = 0;
+        neck((float) (255 + sin(frameCount * 4) * 5), 220, (float) (80 - sin(frameCount * 4) * 5), 80, 0);
+        fill(0, 0, 0, 20);
+        noStroke();
+        rect(0, 0, width, height);
+
+        sheetPlus = 0;
+        head((float) (275 + sin(frameCount * 4) * 5), 160, (float) (80 + sin(frameCount * 4) * 1), 80, (float) (-20 + sin(frameCount * 4) * 3));
+
+        arm(370, 260, 95, (float) (25 + sin(frameCount * 4 + 180) * 3), (float) (-30 + sin(frameCount * 4 + 180) * 3), (float) (-20 + sin(frameCount * 4 + 180) * 3), false);
+        arm(360, 230, 100, (float) (5 + sin(frameCount * 4 + 270) * 3), (float) (-30 + sin(frameCount * 4 + 270) * 3), (float) (-20 + sin(frameCount * 4 + 270) * 3), false);
+        popMatrix();
+    }
+    private static void pjsCode() {
+        background(0, 0, 0);
+        oskol(330, (float) (320 - sin(frameCount * 8) * 2), 90);
+        fill(255, 255, 255, 60);
+        text(":: THE OSKOL ::", 300, 550);
+        text(":: THE OSKOL ::", 300, 553);
     }
 }
