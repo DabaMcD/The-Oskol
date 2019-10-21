@@ -11,7 +11,6 @@ class GameCode {
     private final static int CENTER = 0;
     private final static int BOTTOM = 2;
     private final static int LEFT = 3;
-    private final static int RIGHT = 4;
     private final static int BASELINE = 5;
     private static float tl; // Text Leading: the vertical distance between adjacent lines of text
     private static float ta; // Text Ascent: the vertical distance between the "inner floor" and the "outer ceiling" of the text
@@ -73,12 +72,6 @@ class GameCode {
         pf.set(pm);
         pm.setColor(Color.BLACK);
     }
-    private static void background(int shade) {
-        pm.set(pf);
-        pm.setColor(Color.rgb(shade, shade, shade));
-        canvas.drawRect(0f, 0f, width, height, pf);
-        pf.set(pm);
-    }
     private static void noFill() {
         pf.setColor(Color.TRANSPARENT);
     }
@@ -88,9 +81,6 @@ class GameCode {
     private static void fill(int r, int g, int b) {
         pf.setColor(Color.rgb(r, g, b));
     }
-    private static void fill(int shade) {
-        pf.setColor(Color.rgb(shade, shade, shade));
-    }
     private static void noStroke() {
         ps.setColor(Color.TRANSPARENT);
     }
@@ -99,9 +89,6 @@ class GameCode {
     }
     private static void stroke(int r, int g, int b) {
         ps.setColor(Color.rgb(r, g, b));
-    }
-    private static void stroke(int shade) {
-        ps.setColor(Color.rgb(shade, shade, shade));
     }
     private static void strokeWeight(float w) {
         ps.setStrokeWidth(w);
@@ -123,14 +110,8 @@ class GameCode {
         canvas.drawOval(mrf, pf);
         canvas.drawOval(mrf, ps);
     }
-    private static void textLeading(float dist) {
-        tl = dist;
-    }
     private static void text(String txt, float x, float y) {
         drawMultilineText(txt, x, y);
-    }
-    private static void text(int txt, float x, float y) {
-        drawMultilineText(String.valueOf(txt), x, y);
     }
     private static void drawMultilineText(String str, float x, float y) {
         String[] lines = str.split("\n");
@@ -207,26 +188,8 @@ class GameCode {
         mrf = new RectF(x - w / 2 + ps.getStrokeWidth() / 2, y - h / 2 + ps.getStrokeWidth() / 2, x + w / 2 - ps.getStrokeWidth() / 2, y + h / 2 - ps.getStrokeWidth() / 2);
         canvas.drawArc(mrf, start, stop - start, true, pf);
     }
-    private static double dist(double x1, double y1, double x2, double y2) {
-        return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-    }
     private static double sin(double degrees) {
         return Math.sin(degrees * 2 * Math.PI / 360);
-    }
-    private static double cos(double degrees) {
-        return Math.cos(degrees * 2 * Math.PI / 360);
-    }
-    private static double tan(double degrees) {
-        return Math.tan(degrees * 2 * Math.PI / 360);
-    }
-    private static double asin(double degrees) {
-        return Math.asin(degrees * 2 * Math.PI / 360);
-    }
-    private static double acos(double degrees) {
-        return Math.acos(degrees * 2 * Math.PI / 360);
-    }
-    private static double atan(double degrees) {
-        return Math.atan(degrees * 2 * Math.PI / 360);
     }
     private static void beginShape() {
         mp = new Path();
@@ -243,18 +206,6 @@ class GameCode {
         canvas.drawPath(mp, pf);
         canvas.drawPath(mp, ps);
     }
-    private static double random(double high) {
-        return high * Math.random();
-    }
-    private static double random(double low, double high) {
-        return (high - low) * Math.random() + low;
-    }
-    private static int round(double num) {
-        return (int) num;
-    }
-    private static void point(float x, float y) {
-        canvas.drawPoint(x, y, ps);
-    }
     private static void pushMatrix() {
         canvas.save();
     }
@@ -269,9 +220,6 @@ class GameCode {
     }
     private static void scale(float sx, float sy) {
         canvas.scale(sx, sy, 0, 0);
-    }
-    private static void scale(float s) {
-        canvas.scale(s, s, 0, 0);
     }
     private static void bezierVertex(float x1, float y1, float x2, float y2, float x3, float y3) {
         mp.cubicTo(x1, y1, x2, y2, x3, y3);
@@ -919,7 +867,7 @@ class GameCode {
         popMatrix();
     }
     private static void pjsInit() {
-        pf.setTextSize(40f);
+        textSize(40);
         textAlign(CENTER, CENTER);
     }
     private static void pjsCode() {
