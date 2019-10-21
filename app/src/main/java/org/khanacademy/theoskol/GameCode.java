@@ -920,6 +920,7 @@ class GameCode {
     }
     private static void pjsInit() {
         pf.setTextSize(40f);
+        textAlign(CENTER, CENTER);
     }
     private static void pjsCode() {
         background(0, 0, 0);
