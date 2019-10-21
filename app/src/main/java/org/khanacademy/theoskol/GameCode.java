@@ -31,9 +31,10 @@ class GameCode {
     private static Path mp; // Miscellaneous Path
     private static int frameCount = 0;
     private static String angleMode = "degrees";
+    private static RectF mrf = new RectF(); // Miscellaneous Rect Float
 
     // PJS vars
-
+    private static int sheetPlus = 0;
 
     static void init() {
         ps.setStrokeCap(Paint.Cap.ROUND);
@@ -65,18 +66,17 @@ class GameCode {
         }
     }
     private static void background(int r, int g, int b) {
-        Paint paint = new Paint();
-        paint.set(pf);
+        pm.set(pf);
         pf.setColor(Color.rgb(r, g, b));
         canvas.drawRect(0f, 0f, 400f, 400f, pf);
-        pf.set(paint);
+        pf.set(pm);
+        pm.setColor(Color.BLACK);
     }
     private static void background(int shade) {
-        Paint paint = new Paint();
-        paint.set(pf);
-        pf.setColor(Color.rgb(shade, shade, shade));
+        pm.set(pf);
+        pm.setColor(Color.rgb(shade, shade, shade));
         canvas.drawRect(0f, 0f, 400f, 400f, pf);
-        pf.set(paint);
+        pf.set(pm);
     }
     private static void noFill() {
         pf.setColor(Color.TRANSPARENT);
@@ -112,10 +112,15 @@ class GameCode {
         canvas.drawRect(x, y, x + w, y + h, pf);
         canvas.drawRect(x, y, x + w, y + h, ps);
     }
+    private static void rect(float x, float y, float w, float h, float r) {
+        mrf = new RectF(x, y, x + w, y + h);
+        canvas.drawRoundRect(mrf, r, r, pf);
+        canvas.drawRoundRect(mrf, r, r, ps);
+    }
     private static void ellipse(float x, float y, float w, float h) {
-        RectF r = new RectF(x - (w / 2f), y - (h / 2f), x + (w / 2f), y + (h / 2f));
-        canvas.drawOval(r, pf);
-        canvas.drawOval(r, ps);
+        mrf = new RectF(x - (w / 2f), y - (h / 2f), x + (w / 2f), y + (h / 2f));
+        canvas.drawOval(mrf, pf);
+        canvas.drawOval(mrf, ps);
     }
     private static void textLeading(float dist) {
         tl = dist;
@@ -177,29 +182,29 @@ class GameCode {
         return w;
     }
     private static void triangle(float x1, float y1, float x2, float y2, float x3, float y3) {
-        Path p = new Path();
-        p.moveTo(x1, y1);
-        p.lineTo(x2, y2);
-        p.lineTo(x3, y3);
-        p.close();
-        canvas.drawPath(p, pf);
-        canvas.drawPath(p, ps);
+        mp = new Path();
+        mp.moveTo(x1, y1);
+        mp.lineTo(x2, y2);
+        mp.lineTo(x3, y3);
+        mp.close();
+        canvas.drawPath(mp, pf);
+        canvas.drawPath(mp, ps);
     }
     private static void quad(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
-        Path p = new Path();
-        p.moveTo(x1, y1);
-        p.lineTo(x2, y2);
-        p.lineTo(x3, y3);
-        p.lineTo(x4, y4);
-        p.close();
-        canvas.drawPath(p, pf);
-        canvas.drawPath(p, ps);
+        mp = new Path();
+        mp.moveTo(x1, y1);
+        mp.lineTo(x2, y2);
+        mp.lineTo(x3, y3);
+        mp.lineTo(x4, y4);
+        mp.close();
+        canvas.drawPath(mp, pf);
+        canvas.drawPath(mp, ps);
     }
     private static void arc(float x, float y, float w, float h, float start, float stop) {
-        RectF r = new RectF(x - w / 2, y - h / 2, x + w / 2, y + h / 2);
-        canvas.drawArc(r, start, stop - start, false, ps);
-        r = new RectF(x - w / 2 + ps.getStrokeWidth() / 2, y - h / 2 + ps.getStrokeWidth() / 2, x + w / 2 - ps.getStrokeWidth() / 2, y + h / 2 - ps.getStrokeWidth() / 2);
-        canvas.drawArc(r, start, stop - start, true, pf);
+        mrf = new RectF(x - w / 2, y - h / 2, x + w / 2, y + h / 2);
+        canvas.drawArc(mrf, start, stop - start, false, ps);
+        mrf = new RectF(x - w / 2 + ps.getStrokeWidth() / 2, y - h / 2 + ps.getStrokeWidth() / 2, x + w / 2 - ps.getStrokeWidth() / 2, y + h / 2 - ps.getStrokeWidth() / 2);
+        canvas.drawArc(mrf, start, stop - start, true, pf);
     }
     private static double dist(double x1, double y1, double x2, double y2) {
         return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
@@ -267,18 +272,25 @@ class GameCode {
     private static void scale(float s) {
         canvas.scale(s, s, 0, 0);
     }
-
     private static void bezierVertex(float x1, float y1, float x2, float y2, float x3, float y3) {
         mp.cubicTo(x1, y1, x2, y2, x3, y3);
     }
+    private static void bezier(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
+        mp = new Path();
+        mp.moveTo(x1, y1);
+        mp.cubicTo(x2, y2, x3, y3, x4, y4);
+        canvas.drawPath(mp, ps);
+        canvas.drawPath(mp, pf);
+    }
 
-    private static void sheet(x, y, w, h, r, end) {
+    // PJS functions
+    private static void sheet(float x, float y, float w, float h, float r, boolean end) {
         pushMatrix();
         translate(x, y);
         rotate(r);
         scale(w / 100, h / 100);
         noStroke();
-        fill(100 + sheetPlus, 20 + sheetPlus, 10 + sheetPlus / 1.5);
+        fill(100 + sheetPlus, 20 + sheetPlus, (int) (10 + sheetPlus / 1.5));
         sheetPlus += 20;
         beginShape();
         vertex(0, 5);
@@ -312,7 +324,7 @@ class GameCode {
         popMatrix();
     }
 
-    private static void spike = function(x, y, w, h, r) {
+    private static void spike(float x, float y, float w, float h, float r) {
         pushMatrix();
         translate(x, y);
         rotate(r);
@@ -325,7 +337,7 @@ class GameCode {
         popMatrix();
     }
 
-    private static void toe = function(x, y, w, h, r) {
+    private static void toe(float x, float y, float w, float h, float r) {
         pushMatrix();
         translate(x, y);
         rotate(r);
@@ -340,7 +352,7 @@ class GameCode {
         popMatrix();
     }
 
-    private static void head = function(x, y, w, h, r) {
+    private static void head(float x, float y, float w, float h, float r) {
         pushMatrix();
         translate(x, y);
         rotate(r);
@@ -367,7 +379,6 @@ class GameCode {
         endShape();
 
         // Jets
-        pushStyle();
         stroke(180, 120, 70);
         noFill();
         strokeWeight(15);
@@ -383,7 +394,6 @@ class GameCode {
         fill(0, 0, 50, 60);
         ellipse(43, 87, 15, 15);
         ellipse(43, 87, 10, 8);
-        popStyle();
         noStroke();
 
         // Mouth
@@ -392,9 +402,9 @@ class GameCode {
         translate(0, 20);
         stroke(200, 190, 170);
         fill(0, 0, 80, 100);
-        strokeWeight(3.5);
-        arc(0, 35, 45, 103 + sin(frameCount * mult * 8) * 5, 0, 90);
-        arc(0, 35, 35, 103 + sin(frameCount * mult * 8) * 5, 91, 180);
+        strokeWeight(3.5f);
+        arc(0f, 35f, 45f, (float) (103f + sin(frameCount * 8f) * 5f), 0f, 90f);
+        arc(0f, 35f, 35f, (float) (103f + sin(frameCount * 8f) * 5f), 91f, 180f);
         strokeWeight(7);
         arc(0, 35, 40, 55, 0, 90);
         arc(0, 35, 30, 55, 91, 180);
@@ -414,7 +424,7 @@ class GameCode {
         vertex(-8, 65);
         endShape();
         pushMatrix();
-        translate(0, 2 + sin(frameCount * mult * 8) * 2.5);
+        translate(0, (float) (2 + sin(frameCount * 8) * 2.5));
         beginShape();
         vertex(10, 75);
         vertex(8, 85);
@@ -500,20 +510,20 @@ class GameCode {
         pushMatrix();
         translate(-20, 20);
         rotate(30);
-        ellipse(0, 0, 17, 4 + sin(frameCount * mult * 6));
+        ellipse(0, 0, 17, (float) (4 + sin(frameCount * 6)));
         popMatrix();
         pushMatrix();
         translate(5, 24);
         rotate(-5);
-        ellipse(0, 0, 19, 6 + sin(frameCount * mult * 6));
+        ellipse(0, 0, 19, (float) (6 + sin(frameCount * 6)));
         popMatrix();
         popMatrix();
 
         // Shell
-        sheet(-40, 15, 90, 120, -10 + sin(r) * 2, false);
-        sheet(0, -3, 100, 100, sin(r * 15 + 60) * 2, false);
-        sheet(50, -12, 80, 105, 8 + sin(r * 20 + 120) * 2, false);
-        sheet(90, -16, 80, 110, 15 + sin(r * 30 + 190) * 2, true);
+        sheet(-40, 15, 90, 120, (float) (-10 + sin(r) * 2), false);
+        sheet(0, -3, 100, 100, (float) (sin(r * 15 + 60) * 2), false);
+        sheet(50, -12, 80, 105, (float) (8 + sin(r * 20 + 120) * 2), false);
+        sheet(90, -16, 80, 110, (float) (15 + sin(r * 30 + 190) * 2), true);
 
         // Particles
         pushMatrix();
@@ -521,16 +531,16 @@ class GameCode {
         fill(230, 230, 60, 100);
         stroke(210, 230, 50, 50);
         strokeWeight(2);
-        ellipse(8, 42, 10 + sin(frameCount * mult * 130), 5);
-        ellipse(20, 37, 11 + sin(frameCount * mult * 130), 3);
+        ellipse(8, 42, (float) (10 + sin(frameCount * 130)), 5);
+        ellipse(20, 37, (float) (11 + sin(frameCount * 130)), 3);
         rotate(30);
-        ellipse(-8, 40, 8 + sin(frameCount * mult * 130), 4);
-        ellipse(-14, 33, 6 + sin(frameCount * mult * 130), 3);
+        ellipse(-8, 40, (float) (8 + sin(frameCount * 130)), 4);
+        ellipse(-14, 33, (float) (6 + sin(frameCount * 130)), 3);
         popMatrix();
         popMatrix();
     }
 
-    private static void neck = function(x, y, w, h, r) {
+    private static void neck(float x, float y, float w, float h, float r) {
         pushMatrix();
         translate(x, y);
         rotate(r);
@@ -568,7 +578,7 @@ class GameCode {
         popMatrix();
     }
 
-    private static void body = function(x, y, w, h, r) {
+    private static void body(float x, float y, float w, float h, float r) {
         pushMatrix();
         translate(x, y);
         rotate(r);
@@ -652,7 +662,7 @@ class GameCode {
         popMatrix();
     }
 
-    private static void arm = function(x, y, size, shoulder, elbow, hand, flip) {
+    private static void arm(float x, float y, float size, float shoulder, float elbow, float hand, boolean flip) {
         pushMatrix();
         translate(x, y);
         rotate(shoulder);
@@ -713,7 +723,7 @@ class GameCode {
         pushMatrix();
         translate(20, 10);
         rotate(45);
-        rect(-4, -4, 8, 8, 2);
+        rect(-4f, -4f, 8f, 8f, 2f);
         rotate(-5);
         rect(10, -3, 3, 3);
         rotate(20);
